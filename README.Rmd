@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of spSGMCMC is to ...
+spSGMCMC is designed for the Bayesian inference on massive geostatistical data using GP models which utilize stochastic gradient optimization instead of conventional MCMC. The package accompanies [this paper on arXiv](https://arxiv.org/abs/2405.04531)
 
 ## Installation
 
@@ -31,25 +31,37 @@ pak::pak("reetamm/spSGMCMC")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is an example based on the Argo data used in `GpGp`. You'll need the `GpGp` package for this example to run, since we also use it for our initial values.
 
-```{r example}
+```{r example, silent=T}
+# install.packages("GpGp")
+library(GpGp)
 library(spSGMCMC)
-## basic example code
+library(ggplot2)
+library(tidyverse)
+library(viridis)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+```{r, fig.asp = 0.8, fig.width = 7}
+## Open and plot the data
+argo2016 <- GpGp::argo2016
+argo2016$lon <- ifelse(argo2016$lon>180,argo2016$lon-360,argo2016$lon)
+world <- map_data("world")
+argoplot <- ggplot() +
+  geom_map(
+    data = world, map = world,
+    aes(long, lat, map_id = region),
+    color = "gray", fill = "white", size = 0.01
+  ) +
+  geom_point(
+    data = argo2016,
+    aes(lon, lat, color = temp100),
+    alpha = 0.7,size=0.1
+  ) + coord_fixed()+theme_bw() +
+  scale_color_viridis_c(option = "C")+
+  xlab("Longitude")+
+  ylab("Latitiude")+
+  labs(colour = "Temp (C)")
+argoplot
+  ```
