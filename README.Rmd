@@ -43,7 +43,7 @@ library(viridis)
 ```
 
 
-```{r, fig.asp = 0.8, fig.width = 7}
+```{r,fig.width = 6, fig.height = 4}
 ## Open and plot the data
 argo2016 <- GpGp::argo2016
 argo2016$lon <- ifelse(argo2016$lon>180,argo2016$lon-360,argo2016$lon)
