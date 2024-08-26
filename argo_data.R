@@ -78,7 +78,7 @@ beta_c <- gpgp_fit$betahat; covparams0 <- gpgp_fit$covparms; initial_V <- diag(g
 # library(SGRLD)#library(testsgld)
 # source("./../../test_sgld_output/sgmcmc_functions.R")
 # source("./../sgmcmc_functions.R")
-sgrld_fit <- spsgmcmc(y=y[ord], X = X[ord,], NNarray = NNarray, locs = locs[ord,], beta_0 = beta_c,
+sgrld_fit <- sgrld_mcmc(y=y[ord], X = X[ord,], NNarray = NNarray, locs = locs[ord,], beta_0 = beta_c,
                       covparams0 = covparams0, covfun_name ="matern_isotropic", lr = lr_no_gamma,
                       lr_min = lr_min_no_gamma, n_epochs = n_epoch, n_batch = n_batch, n_burn = n_burn,
                       thin = thin, covparams_prior_params = covparams_prior_params, silent = F)
