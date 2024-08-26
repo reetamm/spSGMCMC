@@ -1,0 +1,25 @@
+Package: spSGMCMC
+Type: Package
+Title: Stochastic gradient MCMC for massive geostatistical data
+Version: 0.1
+Date: 2024-08-26
+Author: Your Name
+Maintainer: Reetam Majumder <reetamm@uark.edu>
+Description: Package accompanying the arxiv paper - https://arxiv.org/abs/2405.04531
+License: GPL (>= 2)
+Imports: 
+    FNN,
+    Rcpp
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo,
+    BH
+RoxygenNote: 7.3.2
+Encoding: UTF-8
+Suggests: 
+    testthat (>= 3.0.0),
+    fields,
+    knitr,
+    rmarkdown,
+    maps
+Config/testthat/edition: 3
