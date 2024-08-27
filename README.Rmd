@@ -89,7 +89,7 @@ gpgp_fit <- GpGp::fit_model(y[ord], locs = locs[ord,], X = X[ord,], covfun_name 
 ```
 
 ```{r SGRLD}
-##### Now fit the SGRLD method
+##### sgrld fit
 n_epoch <- 200
 n_batch <- 250
 lr_sgrld = 1e-4; lr_min_sgrld = 5e-5
@@ -172,7 +172,7 @@ quantile_theta <- apply(sgrld_fit$theta_samples, MARGIN = 2, FUN = function(thet
   return(quantile(theta, probs = seq(0.01, 0.99, 0.02)))})
 predicted_sgrld <- apply(quantile_theta, MARGIN = 1, FUN = function(theta) {
   return(GpGp::cond_sim(locs_pred = locs_pred, X_pred = X_pred, y_obs = y[ord],
-                                 locs_obs = locs[ord,], X_obs = X[ord,], beta = gpgp_fit$betahat,
+                                 locs_obs = locs[ord,], X_obs = X[ord,], beta = sgrld_betahat,
                                  covparms = theta, covfun_name = "matern_isotropic",
                                  m =15, reorder = FALSE, nsims =1))
 }
