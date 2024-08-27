@@ -129,7 +129,7 @@ sgrld_fit <- sgrld_mcmc(y=y[ord], X = X[ord,], NNarray = NNarray, locs = locs[or
 #### Total time taken
 sgrld_fit$elapsed_time
 #> elapsed 
-#>  66.084
+#>  65.891
 #### Plot chains
 par(mfrow = c(2,2))
 library(latex2exp)
@@ -190,15 +190,15 @@ coverage_fun <- function(ci_array, true_values){
 }
 coverage_gpgp <- coverage_fun(predicted_CI, y_pred)
 cat(paste("Average coverage of GpGp on the test set is:", round(mean(coverage_gpgp),4), ".\n"))
-#> Average coverage of GpGp on the test set is: 0.938 .
+#> Average coverage of GpGp on the test set is: 0.9413 .
 cat(paste("Mean squared error of GpGp on the test set is:", round( mean( (predicted - y_pred)^2 ), 4), ".\n"))
-#> Mean squared error of GpGp on the test set is: 1.789 .
+#> Mean squared error of GpGp on the test set is: 1.757 .
 ```
 
 ``` r
 #### Make predictions
 predicted_sgrld_mean <- GpGp::predictions(locs_pred = locs_pred, X_pred = X_pred, y_obs = y[ord],
-                               locs_obs = locs[ord,], X_obs = X[ord,], beta = gpgp_fit$betahat,
+                               locs_obs = locs[ord,], X_obs = X[ord,], beta = sgrld_betahat,
                                covparms = sgrld_thetahat, covfun_name = "matern_isotropic",
                                m =15, reorder = FALSE )
 par(mfrow = c(1,1))
@@ -213,9 +213,10 @@ abline(a=0, b = 1, col = "red")
 library(parallel)
 quantile_theta <- apply(sgrld_fit$theta_samples, MARGIN = 2, FUN = function(theta){
   return(quantile(theta, probs = seq(0.01, 0.99, 0.02)))})
+mean_beta <- apply(sgrld_fit$beta_samples, MARGIN = 2, FUN = mean)
 predicted_sgrld <- apply(quantile_theta, MARGIN = 1, FUN = function(theta) {
   return(GpGp::cond_sim(locs_pred = locs_pred, X_pred = X_pred, y_obs = y[ord],
-                                 locs_obs = locs[ord,], X_obs = X[ord,], beta = sgrld_betahat,
+                                 locs_obs = locs[ord,], X_obs = X[ord,], beta = mean_beta,
                                  covparms = theta, covfun_name = "matern_isotropic",
                                  m =15, reorder = FALSE, nsims =1))
 }
@@ -227,20 +228,20 @@ predicted_CI_sgrld <- t(predicted_CI_sgrld)
 ``` r
 coverage_sgrld <- coverage_fun(predicted_CI_sgrld[, c(1,3)], y_pred)
 cat(paste("Average coverage of SGRLD on the test set is: ", round(mean(coverage_sgrld),4), ".\n", sep = ""))
-#> Average coverage of SGRLD on the test set is: 0.9233.
+#> Average coverage of SGRLD on the test set is: 0.9267.
 cat(paste("Mean squared error of SGRLD on the test set is: ", round( mean( (predicted_sgrld_mean - y_pred)^2 ), 4), ".\n", sep = ""))
-#> Mean squared error of SGRLD on the test set is: 1.7913.
+#> Mean squared error of SGRLD on the test set is: 1.7563.
 cat(paste("Mean squared error of SGRLD median on the test set is: ",
           round( mean( (predicted_CI_sgrld[,2] - y_pred)^2 ), 4), ".\n", sep=""))
-#> Mean squared error of SGRLD median on the test set is: 1.8374.
+#> Mean squared error of SGRLD median on the test set is: 1.8018.
 sgrld_ESS_beta <- coda::effectiveSize(x = sgrld_fit$beta_samples)/(sgrld_fit$elapsed_time/60)
 sgrld_ESS_theta <- coda::effectiveSize(x = sgrld_fit$theta_samples)/(sgrld_fit$elapsed_time/60)
 cat(paste("SGRLD ESS/min of $\\beta$ is:\n"));round(sgrld_ESS_beta, digits = 4)
 #> SGRLD ESS/min of $\beta$ is:
 #>     var1     var2     var3     var4     var5 
-#> 4721.264 4721.264 4448.961 4721.264 4721.264
+#> 4735.093 4735.093 4735.093 4735.093 4748.385
 cat(paste("SGRLD ESS/min of $\\theta$ is:\n"));round(sgrld_ESS_theta, digits = 4)
 #> SGRLD ESS/min of $\theta$ is:
 #>    var1    var2    var3    var4 
-#>  7.7640 19.4369  1.0681  4.5938
+#>  9.0929 24.8752  2.0375  3.6888
 ```

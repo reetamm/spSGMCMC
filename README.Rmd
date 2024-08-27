@@ -160,7 +160,7 @@ cat(paste("Mean squared error of GpGp on the test set is:", round( mean( (predic
 ```{r sgrld_predictions}
 #### Make predictions
 predicted_sgrld_mean <- GpGp::predictions(locs_pred = locs_pred, X_pred = X_pred, y_obs = y[ord],
-                               locs_obs = locs[ord,], X_obs = X[ord,], beta = gpgp_fit$betahat,
+                               locs_obs = locs[ord,], X_obs = X[ord,], beta = sgrld_betahat,
                                covparms = sgrld_thetahat, covfun_name = "matern_isotropic",
                                m =15, reorder = FALSE )
 par(mfrow = c(1,1))
@@ -170,9 +170,10 @@ abline(a=0, b = 1, col = "red")
 library(parallel)
 quantile_theta <- apply(sgrld_fit$theta_samples, MARGIN = 2, FUN = function(theta){
   return(quantile(theta, probs = seq(0.01, 0.99, 0.02)))})
+mean_beta <- apply(sgrld_fit$beta_samples, MARGIN = 2, FUN = mean)
 predicted_sgrld <- apply(quantile_theta, MARGIN = 1, FUN = function(theta) {
   return(GpGp::cond_sim(locs_pred = locs_pred, X_pred = X_pred, y_obs = y[ord],
-                                 locs_obs = locs[ord,], X_obs = X[ord,], beta = sgrld_betahat,
+                                 locs_obs = locs[ord,], X_obs = X[ord,], beta = mean_beta,
                                  covparms = theta, covfun_name = "matern_isotropic",
                                  m =15, reorder = FALSE, nsims =1))
 }
