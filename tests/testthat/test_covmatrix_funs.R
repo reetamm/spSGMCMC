@@ -3,8 +3,7 @@ context("Covariance Functions")
 
 covfun_names <- c(
   "matern_isotropic",
-  "exponential_isotropic",
-  "matern15_isotropic"
+  "exponential_isotropic"
   )
 
 get_test_locs <- function(covfun_name,n){

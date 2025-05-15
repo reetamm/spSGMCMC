@@ -9,11 +9,11 @@ get_start_parms(y, X, locs, covfun_name)
 \arguments{
 \item{y}{response}
 
-\item{X}{design matrix}
+\item{X}{design matrix, with the first column being a vector of 1's for the intercept}
 
 \item{locs}{locations}
 
-\item{covfun_name}{string name of covariance function}
+\item{covfun_name}{string name of covariance function. Options are 'exponential_isotropic', 'matern_isotropic', 'matern15_isotropic'}
 }
 \description{
 get default starting values of covariance parameters

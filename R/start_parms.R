@@ -1,12 +1,14 @@
 #' get default starting values of covariance parameters
 #'
 #' @param y response
-#' @param X design matrix
+#' @param X design matrix, with the first column being a vector of 1's for the intercept
 #' @param locs locations
-#' @param covfun_name string name of covariance function
+#' @param covfun_name string name of covariance function. Options are 'exponential_isotropic', 'matern_isotropic', 'matern15_isotropic'
+#' @export
 get_start_parms <- function(y,X,locs,covfun_name){
   
   fitlm <- stats::lm(y ~ X - 1 )
+  start_beta <- as.numeric(fitlm$coefficients)
   start_var <- summary(fitlm)$sigma^2
   start_smooth <- 0.8
   start_nug <- 0.1
@@ -27,7 +29,7 @@ get_start_parms <- function(y,X,locs,covfun_name){
     start_range <- mean( dmat )/4
     start_parms <- c(start_var, start_range, start_nug)
   }
-  return( list( start_parms = start_parms ) )
+  return( list( covparams = start_parms, betahat = start_beta ) )
 }
 
 
