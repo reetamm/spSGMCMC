@@ -1,5 +1,5 @@
 #' ADAM SGLD update step
-#' 
+#' @importFrom stats rnorm
 adam_sgld_update <- function(phi, grad_t, lr,
                              momentum_t, V_t,
                              beta_1 = 0.9, 
@@ -40,7 +40,7 @@ adamsgld_mcmc <- function(y, X, NNarray, locs, beta_0, covparams0, covfun_name =
     batch_ind <- sample(1:n, size = n_batch, replace = F)
     ordered_batch_ind <- sort(batch_ind)
     
-    pass_list_all_batch_ordered <- vecchia_profbeta_loglik_grad_info(batch_id = ordered_batch_ind, covparms = covparams0,
+    pass_list_all_batch_ordered <- ma_vecchia_profbeta_loglik_grad_info(batch_id = ordered_batch_ind, covparms = covparams0,
                                                                         covfun_name = "matern_isotropic", y = y,
                                                                         X = X, current_beta = beta_0, locs = locs, NNarray = NNarray)
     #browser()
@@ -93,7 +93,7 @@ adamsgld_mcmc <- function(y, X, NNarray, locs, beta_0, covparams0, covfun_name =
       if(restart_count > 10) break
       momentum <- 0
       V <- 0
-      pass_list_all_batch_ordered <- vecchia_profbeta_loglik_grad_info(batch_id = ordered_batch_ind, covparms = covparams0,
+      pass_list_all_batch_ordered <- ma_vecchia_profbeta_loglik_grad_info(batch_id = ordered_batch_ind, covparms = covparams0,
                                                                           covfun_name = "matern_isotropic", y = y,
                                                                           X = X, current_beta = beta_0, locs = locs, NNarray = NNarray)
       #browser()

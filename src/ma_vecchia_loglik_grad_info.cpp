@@ -29,7 +29,7 @@ using namespace arma;
 //' The covariance matrix for \code{$betahat} is the inverse of \code{$betainfo}.
 //' @export
 // [[Rcpp::export]]
-List vecchia_profbeta_loglik_grad_info(
+List ma_vecchia_profbeta_loglik_grad_info(
     IntegerVector batch_id,
     NumericVector covparms,
     StringVector covfun_name,
@@ -195,7 +195,7 @@ List SGRLD_loop(
         std::sort(batch_id.begin(), batch_id.end());
         start = n_batch*(i+1);
         //Now we have the ordered_batch_id
-        List pieces = vecchia_profbeta_loglik_grad_info(batch_id, current_covparams, covfun_name, y, X, current_beta, locs, NNarray);
+        List pieces = ma_vecchia_profbeta_loglik_grad_info(batch_id, current_covparams, covfun_name, y, X, current_beta, locs, NNarray);
         //Now we need to reparametereize the quantities
         double pieces3 = as<NumericVector>(pieces[3])[0];
         grad_theta = grad_factor*pieces3;

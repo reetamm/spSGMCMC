@@ -114,6 +114,58 @@ rcpp_d_kernel_sexp_s <- function(M, N, l, s, equal_matrices) {
     .Call(`_spSGMCMC_rcpp_d_kernel_sexp_s`, M, N, l, s, equal_matrices)
 }
 
+#' @param X Design matrix of covariates. Row \code{i} of \code{X} contains
+#' the covariates for the observation at row \code{i} of \code{locs}.
+#' @return A list containing
+#' \itemize{
+#'     \item \code{loglik}: the loglikelihood
+#'     \item \code{grad}: gradient with respect to covariance parameters
+#'     \item \code{info}: Fisher information for covariance parameters
+#'     \item \code{betahat}: profile likelihood estimate of regression coefs
+#'     \item \code{betainfo}: information matrix for \code{betahat}.
+#'     \item \code{grad_beta}: gradient of the loglikelihood with respect to mean parameters
+#' }
+#' The covariance matrix for \code{$betahat} is the inverse of \code{$betainfo}.
+#' @export
+ma_vecchia_profbeta_loglik_grad_info <- function(batch_id, covparms, covfun_name, y, X, current_beta, locs, NNarray) {
+    .Call(`_spSGMCMC_ma_vecchia_profbeta_loglik_grad_info`, batch_id, covparms, covfun_name, y, X, current_beta, locs, NNarray)
+}
+
+#' Function to transform the gradients and fisher information
+#' of the likelihood from the constrained to unconstrained space
+#' @param \code{grad} gradient with respect to cov_params
+#' @param \code{info} Fisher information for cov_params
+#' @param \code{grad_phi} reference to vector for storing unconstrained gradients
+#' @param \code{info_phi} reference to matrix for unconstrained Fisher info
+#' @export
+reparameterized_quantities <- function(cov_params, grad, info, grad_phi, info_phi) {
+    invisible(.Call(`_spSGMCMC_reparameterized_quantities`, cov_params, grad, info, grad_phi, info_phi))
+}
+
+#' Function to take an SGDRLD step
+#' for the covariance parameters
+#' This function returns \eqn{( \log(\sigma^2), \log(\alpha), \log(\nu), \log(\tau^2) )_{t+1}}
+#' @param \eqn{\epsilon} the step size
+#' @param \code{info} the fisher information matrix i.e. preconditionner for the cov parameters
+#' @parm \code{cov_params} the current state of the cov parameters
+#' @parm \code{grad} sample gradient with respect to \eqn{( \log(\sigma^2), \log(\alpha), \log(\nu), \log(\tau^2) )_{t+1}}
+#' @export
+SGRLD_step <- function(epsilon, info, cov_params, grad) {
+    .Call(`_spSGMCMC_SGRLD_step`, epsilon, info, cov_params, grad)
+}
+
+#' Function to run spSGMCMC for a number of iterations
+#' @param \code{y}
+#' @param \code{X}
+#' @param \code{NNarray}
+SGRLD_loop <- function(y, X, NNarray, covfun_name, locs, beta_0, covparams0, prior_params, indexes, n_epochs, n_batch, n_burn, lr, thin) {
+    .Call(`_spSGMCMC_SGRLD_loop`, y, X, NNarray, covfun_name, locs, beta_0, covparams0, prior_params, indexes, n_epochs, n_batch, n_burn, lr, thin)
+}
+
+sample_pieces <- function(batch_id, NNarray, covparms, X, y, locs, covfun_name) {
+    .Call(`_spSGMCMC_sample_pieces`, batch_id, NNarray, covparms, X, y, locs, covfun_name)
+}
+
 #' Multiply approximate inverse Cholesky by a vector
 #'
 #' Vecchia's approximation implies a sparse approximation to the
@@ -278,57 +330,5 @@ transformed_matern_parms_logprior_grad <- function(logparms, prior_params) {
 
 rcpp_hello_world <- function() {
     .Call(`_spSGMCMC_rcpp_hello_world`)
-}
-
-#' @param X Design matrix of covariates. Row \code{i} of \code{X} contains
-#' the covariates for the observation at row \code{i} of \code{locs}.
-#' @return A list containing
-#' \itemize{
-#'     \item \code{loglik}: the loglikelihood
-#'     \item \code{grad}: gradient with respect to covariance parameters
-#'     \item \code{info}: Fisher information for covariance parameters
-#'     \item \code{betahat}: profile likelihood estimate of regression coefs
-#'     \item \code{betainfo}: information matrix for \code{betahat}.
-#'     \item \code{grad_beta}: gradient of the loglikelihood with respect to mean parameters
-#' }
-#' The covariance matrix for \code{$betahat} is the inverse of \code{$betainfo}.
-#' @export
-vecchia_profbeta_loglik_grad_info <- function(batch_id, covparms, covfun_name, y, X, current_beta, locs, NNarray) {
-    .Call(`_spSGMCMC_vecchia_profbeta_loglik_grad_info`, batch_id, covparms, covfun_name, y, X, current_beta, locs, NNarray)
-}
-
-#' Function to transform the gradients and fisher information
-#' of the likelihood from the constrained to unconstrained space
-#' @param \code{grad} gradient with respect to cov_params
-#' @param \code{info} Fisher information for cov_params
-#' @param \code{grad_phi} reference to vector for storing unconstrained gradients
-#' @param \code{info_phi} reference to matrix for unconstrained Fisher info
-#' @export
-reparameterized_quantities <- function(cov_params, grad, info, grad_phi, info_phi) {
-    invisible(.Call(`_spSGMCMC_reparameterized_quantities`, cov_params, grad, info, grad_phi, info_phi))
-}
-
-#' Function to take an SGDRLD step
-#' for the covariance parameters
-#' This function returns \eqn{( \log(\sigma^2), \log(\alpha), \log(\nu), \log(\tau^2) )_{t+1}}
-#' @param \eqn{\epsilon} the step size
-#' @param \code{info} the fisher information matrix i.e. preconditionner for the cov parameters
-#' @parm \code{cov_params} the current state of the cov parameters
-#' @parm \code{grad} sample gradient with respect to \eqn{( \log(\sigma^2), \log(\alpha), \log(\nu), \log(\tau^2) )_{t+1}}
-#' @export
-SGRLD_step <- function(epsilon, info, cov_params, grad) {
-    .Call(`_spSGMCMC_SGRLD_step`, epsilon, info, cov_params, grad)
-}
-
-#' Function to run spSGMCMC for a number of iterations
-#' @param \code{y}
-#' @param \code{X}
-#' @param \code{NNarray}
-SGRLD_loop <- function(y, X, NNarray, covfun_name, locs, beta_0, covparams0, prior_params, indexes, n_epochs, n_batch, n_burn, lr, thin) {
-    .Call(`_spSGMCMC_SGRLD_loop`, y, X, NNarray, covfun_name, locs, beta_0, covparams0, prior_params, indexes, n_epochs, n_batch, n_burn, lr, thin)
-}
-
-sample_pieces <- function(batch_id, NNarray, covparms, X, y, locs, covfun_name) {
-    .Call(`_spSGMCMC_sample_pieces`, batch_id, NNarray, covparms, X, y, locs, covfun_name)
 }
 

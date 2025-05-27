@@ -176,6 +176,93 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ma_vecchia_profbeta_loglik_grad_info
+List ma_vecchia_profbeta_loglik_grad_info(IntegerVector batch_id, NumericVector covparms, StringVector covfun_name, NumericVector& y, NumericMatrix& X, NumericVector current_beta, const NumericMatrix& locs, NumericMatrix& NNarray);
+RcppExport SEXP _spSGMCMC_ma_vecchia_profbeta_loglik_grad_info(SEXP batch_idSEXP, SEXP covparmsSEXP, SEXP covfun_nameSEXP, SEXP ySEXP, SEXP XSEXP, SEXP current_betaSEXP, SEXP locsSEXP, SEXP NNarraySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type batch_id(batch_idSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type covparms(covparmsSEXP);
+    Rcpp::traits::input_parameter< StringVector >::type covfun_name(covfun_nameSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type current_beta(current_betaSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type locs(locsSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type NNarray(NNarraySEXP);
+    rcpp_result_gen = Rcpp::wrap(ma_vecchia_profbeta_loglik_grad_info(batch_id, covparms, covfun_name, y, X, current_beta, locs, NNarray));
+    return rcpp_result_gen;
+END_RCPP
+}
+// reparameterized_quantities
+void reparameterized_quantities(NumericVector& cov_params, NumericVector& grad, NumericMatrix& info, NumericVector& grad_phi, NumericVector& info_phi);
+RcppExport SEXP _spSGMCMC_reparameterized_quantities(SEXP cov_paramsSEXP, SEXP gradSEXP, SEXP infoSEXP, SEXP grad_phiSEXP, SEXP info_phiSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type cov_params(cov_paramsSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type grad(gradSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type info(infoSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type grad_phi(grad_phiSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type info_phi(info_phiSEXP);
+    reparameterized_quantities(cov_params, grad, info, grad_phi, info_phi);
+    return R_NilValue;
+END_RCPP
+}
+// SGRLD_step
+NumericVector SGRLD_step(double epsilon, NumericMatrix& info, NumericVector& cov_params, NumericVector& grad);
+RcppExport SEXP _spSGMCMC_SGRLD_step(SEXP epsilonSEXP, SEXP infoSEXP, SEXP cov_paramsSEXP, SEXP gradSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type info(infoSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type cov_params(cov_paramsSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type grad(gradSEXP);
+    rcpp_result_gen = Rcpp::wrap(SGRLD_step(epsilon, info, cov_params, grad));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SGRLD_loop
+List SGRLD_loop(NumericVector& y, NumericMatrix& X, NumericMatrix& NNarray, StringVector covfun_name, NumericMatrix& locs, NumericVector beta_0, NumericVector covparams0, NumericMatrix prior_params, IntegerVector& indexes, int n_epochs, int n_batch, int n_burn, double lr, int thin);
+RcppExport SEXP _spSGMCMC_SGRLD_loop(SEXP ySEXP, SEXP XSEXP, SEXP NNarraySEXP, SEXP covfun_nameSEXP, SEXP locsSEXP, SEXP beta_0SEXP, SEXP covparams0SEXP, SEXP prior_paramsSEXP, SEXP indexesSEXP, SEXP n_epochsSEXP, SEXP n_batchSEXP, SEXP n_burnSEXP, SEXP lrSEXP, SEXP thinSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type NNarray(NNarraySEXP);
+    Rcpp::traits::input_parameter< StringVector >::type covfun_name(covfun_nameSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix& >::type locs(locsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type beta_0(beta_0SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type covparams0(covparams0SEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type prior_params(prior_paramsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector& >::type indexes(indexesSEXP);
+    Rcpp::traits::input_parameter< int >::type n_epochs(n_epochsSEXP);
+    Rcpp::traits::input_parameter< int >::type n_batch(n_batchSEXP);
+    Rcpp::traits::input_parameter< int >::type n_burn(n_burnSEXP);
+    Rcpp::traits::input_parameter< double >::type lr(lrSEXP);
+    Rcpp::traits::input_parameter< int >::type thin(thinSEXP);
+    rcpp_result_gen = Rcpp::wrap(SGRLD_loop(y, X, NNarray, covfun_name, locs, beta_0, covparams0, prior_params, indexes, n_epochs, n_batch, n_burn, lr, thin));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sample_pieces
+List sample_pieces(IntegerVector batch_id, NumericMatrix NNarray, NumericVector covparms, NumericMatrix X, NumericVector y, NumericMatrix locs, StringVector covfun_name);
+RcppExport SEXP _spSGMCMC_sample_pieces(SEXP batch_idSEXP, SEXP NNarraySEXP, SEXP covparmsSEXP, SEXP XSEXP, SEXP ySEXP, SEXP locsSEXP, SEXP covfun_nameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type batch_id(batch_idSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type NNarray(NNarraySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type covparms(covparmsSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type locs(locsSEXP);
+    Rcpp::traits::input_parameter< StringVector >::type covfun_name(covfun_nameSEXP);
+    rcpp_result_gen = Rcpp::wrap(sample_pieces(batch_id, NNarray, covparms, X, y, locs, covfun_name));
+    return rcpp_result_gen;
+END_RCPP
+}
 // Linv_mult
 NumericVector Linv_mult(NumericMatrix Linv, NumericVector z, IntegerMatrix NNarray);
 RcppExport SEXP _spSGMCMC_Linv_mult(SEXP LinvSEXP, SEXP zSEXP, SEXP NNarraySEXP) {
@@ -369,93 +456,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// vecchia_profbeta_loglik_grad_info
-List vecchia_profbeta_loglik_grad_info(IntegerVector batch_id, NumericVector covparms, StringVector covfun_name, NumericVector& y, NumericMatrix& X, NumericVector current_beta, const NumericMatrix& locs, NumericMatrix& NNarray);
-RcppExport SEXP _spSGMCMC_vecchia_profbeta_loglik_grad_info(SEXP batch_idSEXP, SEXP covparmsSEXP, SEXP covfun_nameSEXP, SEXP ySEXP, SEXP XSEXP, SEXP current_betaSEXP, SEXP locsSEXP, SEXP NNarraySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type batch_id(batch_idSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type covparms(covparmsSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type covfun_name(covfun_nameSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type current_beta(current_betaSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type locs(locsSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type NNarray(NNarraySEXP);
-    rcpp_result_gen = Rcpp::wrap(vecchia_profbeta_loglik_grad_info(batch_id, covparms, covfun_name, y, X, current_beta, locs, NNarray));
-    return rcpp_result_gen;
-END_RCPP
-}
-// reparameterized_quantities
-void reparameterized_quantities(NumericVector& cov_params, NumericVector& grad, NumericMatrix& info, NumericVector& grad_phi, NumericVector& info_phi);
-RcppExport SEXP _spSGMCMC_reparameterized_quantities(SEXP cov_paramsSEXP, SEXP gradSEXP, SEXP infoSEXP, SEXP grad_phiSEXP, SEXP info_phiSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector& >::type cov_params(cov_paramsSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type grad(gradSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type info(infoSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type grad_phi(grad_phiSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type info_phi(info_phiSEXP);
-    reparameterized_quantities(cov_params, grad, info, grad_phi, info_phi);
-    return R_NilValue;
-END_RCPP
-}
-// SGRLD_step
-NumericVector SGRLD_step(double epsilon, NumericMatrix& info, NumericVector& cov_params, NumericVector& grad);
-RcppExport SEXP _spSGMCMC_SGRLD_step(SEXP epsilonSEXP, SEXP infoSEXP, SEXP cov_paramsSEXP, SEXP gradSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type info(infoSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type cov_params(cov_paramsSEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type grad(gradSEXP);
-    rcpp_result_gen = Rcpp::wrap(SGRLD_step(epsilon, info, cov_params, grad));
-    return rcpp_result_gen;
-END_RCPP
-}
-// SGRLD_loop
-List SGRLD_loop(NumericVector& y, NumericMatrix& X, NumericMatrix& NNarray, StringVector covfun_name, NumericMatrix& locs, NumericVector beta_0, NumericVector covparams0, NumericMatrix prior_params, IntegerVector& indexes, int n_epochs, int n_batch, int n_burn, double lr, int thin);
-RcppExport SEXP _spSGMCMC_SGRLD_loop(SEXP ySEXP, SEXP XSEXP, SEXP NNarraySEXP, SEXP covfun_nameSEXP, SEXP locsSEXP, SEXP beta_0SEXP, SEXP covparams0SEXP, SEXP prior_paramsSEXP, SEXP indexesSEXP, SEXP n_epochsSEXP, SEXP n_batchSEXP, SEXP n_burnSEXP, SEXP lrSEXP, SEXP thinSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type NNarray(NNarraySEXP);
-    Rcpp::traits::input_parameter< StringVector >::type covfun_name(covfun_nameSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix& >::type locs(locsSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type beta_0(beta_0SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type covparams0(covparams0SEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type prior_params(prior_paramsSEXP);
-    Rcpp::traits::input_parameter< IntegerVector& >::type indexes(indexesSEXP);
-    Rcpp::traits::input_parameter< int >::type n_epochs(n_epochsSEXP);
-    Rcpp::traits::input_parameter< int >::type n_batch(n_batchSEXP);
-    Rcpp::traits::input_parameter< int >::type n_burn(n_burnSEXP);
-    Rcpp::traits::input_parameter< double >::type lr(lrSEXP);
-    Rcpp::traits::input_parameter< int >::type thin(thinSEXP);
-    rcpp_result_gen = Rcpp::wrap(SGRLD_loop(y, X, NNarray, covfun_name, locs, beta_0, covparams0, prior_params, indexes, n_epochs, n_batch, n_burn, lr, thin));
-    return rcpp_result_gen;
-END_RCPP
-}
-// sample_pieces
-List sample_pieces(IntegerVector batch_id, NumericMatrix NNarray, NumericVector covparms, NumericMatrix X, NumericVector y, NumericMatrix locs, StringVector covfun_name);
-RcppExport SEXP _spSGMCMC_sample_pieces(SEXP batch_idSEXP, SEXP NNarraySEXP, SEXP covparmsSEXP, SEXP XSEXP, SEXP ySEXP, SEXP locsSEXP, SEXP covfun_nameSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type batch_id(batch_idSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type NNarray(NNarraySEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type covparms(covparmsSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type locs(locsSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type covfun_name(covfun_nameSEXP);
-    rcpp_result_gen = Rcpp::wrap(sample_pieces(batch_id, NNarray, covparms, X, y, locs, covfun_name));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_spSGMCMC_exponential_isotropic", (DL_FUNC) &_spSGMCMC_exponential_isotropic, 2},
@@ -471,6 +471,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_spSGMCMC_rcpp_kernel_sexp", (DL_FUNC) &_spSGMCMC_rcpp_kernel_sexp, 5},
     {"_spSGMCMC_rcpp_d_kernel_sexp_l", (DL_FUNC) &_spSGMCMC_rcpp_d_kernel_sexp_l, 5},
     {"_spSGMCMC_rcpp_d_kernel_sexp_s", (DL_FUNC) &_spSGMCMC_rcpp_d_kernel_sexp_s, 5},
+    {"_spSGMCMC_ma_vecchia_profbeta_loglik_grad_info", (DL_FUNC) &_spSGMCMC_ma_vecchia_profbeta_loglik_grad_info, 8},
+    {"_spSGMCMC_reparameterized_quantities", (DL_FUNC) &_spSGMCMC_reparameterized_quantities, 5},
+    {"_spSGMCMC_SGRLD_step", (DL_FUNC) &_spSGMCMC_SGRLD_step, 4},
+    {"_spSGMCMC_SGRLD_loop", (DL_FUNC) &_spSGMCMC_SGRLD_loop, 14},
+    {"_spSGMCMC_sample_pieces", (DL_FUNC) &_spSGMCMC_sample_pieces, 7},
     {"_spSGMCMC_Linv_mult", (DL_FUNC) &_spSGMCMC_Linv_mult, 3},
     {"_spSGMCMC_L_mult", (DL_FUNC) &_spSGMCMC_L_mult, 3},
     {"_spSGMCMC_Linv_t_mult", (DL_FUNC) &_spSGMCMC_Linv_t_mult, 3},
@@ -487,11 +492,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_spSGMCMC_transformed_matern_parms_logprior", (DL_FUNC) &_spSGMCMC_transformed_matern_parms_logprior, 2},
     {"_spSGMCMC_transformed_matern_parms_logprior_grad", (DL_FUNC) &_spSGMCMC_transformed_matern_parms_logprior_grad, 2},
     {"_spSGMCMC_rcpp_hello_world", (DL_FUNC) &_spSGMCMC_rcpp_hello_world, 0},
-    {"_spSGMCMC_vecchia_profbeta_loglik_grad_info", (DL_FUNC) &_spSGMCMC_vecchia_profbeta_loglik_grad_info, 8},
-    {"_spSGMCMC_reparameterized_quantities", (DL_FUNC) &_spSGMCMC_reparameterized_quantities, 5},
-    {"_spSGMCMC_SGRLD_step", (DL_FUNC) &_spSGMCMC_SGRLD_step, 4},
-    {"_spSGMCMC_SGRLD_loop", (DL_FUNC) &_spSGMCMC_SGRLD_loop, 14},
-    {"_spSGMCMC_sample_pieces", (DL_FUNC) &_spSGMCMC_sample_pieces, 7},
     {NULL, NULL, 0}
 };
 

@@ -1,4 +1,5 @@
 #' MSGLD upate step
+#' @importFrom stats rnorm
 msgld_update <- function(phi, grad_t,momentum_t,
                          beta=0.9, lr, bias_factor=1,
                          temperature=1){
@@ -29,7 +30,7 @@ msgld_mcmc <- function(y, X, NNarray, locs, beta_0, covparams0, covfun_name = "m
     batch_ind <- sample(1:n, size = n_batch, replace = F)
     ordered_batch_ind <- sort(batch_ind)
     
-    pass_list_all_batch_ordered <- vecchia_profbeta_loglik_grad_info(batch_id = ordered_batch_ind, covparms = covparams0,
+    pass_list_all_batch_ordered <- ma_vecchia_profbeta_loglik_grad_info(batch_id = ordered_batch_ind, covparms = covparams0,
                                                                         covfun_name = "matern_isotropic", y = y,
                                                                         X = X, current_beta = beta_0, locs = locs, NNarray = NNarray)
     #browser()
@@ -78,7 +79,7 @@ msgld_mcmc <- function(y, X, NNarray, locs, beta_0, covparams0, covfun_name = "m
       restart_count <- restart_count + 1
       if(restart_count > 10) break
       momentum <- 0
-      pass_list_all_batch_ordered <- vecchia_profbeta_loglik_grad_info(batch_id = ordered_batch_ind, covparms = covparams0,
+      pass_list_all_batch_ordered <- ma_vecchia_profbeta_loglik_grad_info(batch_id = ordered_batch_ind, covparms = covparams0,
                                                                           covfun_name = "matern_isotropic", y = y,
                                                                           X = X, current_beta = beta_0, locs = locs, NNarray = NNarray)
       #browser()

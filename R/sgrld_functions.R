@@ -27,6 +27,7 @@ update_preconditioner <- function(V, grad, alpha=0.99, lambda = 1e-5, diag_V = T
 }
 
 #' update State
+#' @importFrom stats rnorm
 updat_state <- function(phi, grad, G, lr, add_noise = T, diag_G = T){
   if(diag_G){
     new_phi <- phi + 0.5*lr*grad*G
@@ -40,6 +41,7 @@ updat_state <- function(phi, grad, G, lr, add_noise = T, diag_G = T){
 }
 
 #' SGRLD steps for covariance parameters
+#' @importFrom stats rnorm
 r_sgrld_step <- function(lr, info, logparms, grad){
   chol_info <- chol(info)
   G <- chol2inv(chol_info)
@@ -93,7 +95,7 @@ sgrld_mcmc <- function(y, X, NNarray, locs, beta_0, covparams0, covfun_name = "m
     batch_ind <- sample(1:n, size = n_batch, replace = F)
     ordered_batch_ind <- sort(batch_ind)
 
-    pass_list_all_batch_ordered <- vecchia_profbeta_loglik_grad_info(batch_id = ordered_batch_ind, covparms = covparams0,
+    pass_list_all_batch_ordered <- ma_vecchia_profbeta_loglik_grad_info(batch_id = ordered_batch_ind, covparms = covparams0,
                                                                         covfun_name = "matern_isotropic", y = y,
                                                                         X = X, current_beta = beta_0, locs = locs, NNarray = NNarray)
     grad_theta <- (n/n_batch)*pass_list_all_batch_ordered$grad_t
@@ -150,7 +152,7 @@ sgrld_mcmc <- function(y, X, NNarray, locs, beta_0, covparams0, covfun_name = "m
       iter_count <- 1
       restart_count <- restart_count + 1
       if(restart_count > 11) break
-      pass_list_all_batch_ordered <- vecchia_profbeta_loglik_grad_info(batch_id = ordered_batch_ind, covparms = covparams0,
+      pass_list_all_batch_ordered <- ma_vecchia_profbeta_loglik_grad_info(batch_id = ordered_batch_ind, covparms = covparams0,
                                                                           covfun_name = "matern_isotropic", y = y,
                                                                           X = X, current_beta = beta_0, locs = locs, NNarray = NNarray)
       grad_theta <- (n/n_batch)*pass_list_all_batch_ordered$grad_t

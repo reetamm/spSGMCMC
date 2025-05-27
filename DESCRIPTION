@@ -9,7 +9,8 @@ Description: Package accompanying the arxiv paper - https://arxiv.org/abs/2405.0
 License: GPL (>= 2)
 Imports: 
     FNN,
-    Rcpp
+    Rcpp,
+    stats
 LinkingTo: 
     Rcpp,
     RcppArmadillo,

@@ -1,5 +1,5 @@
 
-context("Covariance Functions")
+# context("Covariance Functions")
 
 covfun_names <- c(
   "matern_isotropic",
@@ -31,8 +31,8 @@ test_that("covariance functions return positive definite matrix", {
   for(j in 1:length(covfun_names)){
     locs <- get_test_locs(covfun_names[j],n)
     covparms <- get_start_parms(rnorm(n),rep(1,n),locs,covfun_names[j])
-    covfun <- get( covfun_names[j] )
-    covmat <- covfun( covparms$start_parms, locs )
+    covfun <- get( covfun_names[j])
+    covmat <- covfun( covparms$covparams, locs )
     cholmat <- t(chol(covmat))
     logdet <- 2*sum(log(diag(cholmat)))
     expect_lt( logdet, sum(log(diag(covmat))) )
@@ -50,7 +50,7 @@ test_that("covariance function derivatives match finite differencing", {
     
     locs <- get_test_locs(covfun_names[j],n)
     covparms <- get_start_parms(rnorm(n),rep(1,n),locs,covfun_names[j])
-    covparms <- covparms$start_parms
+    covparms <- covparms$covparams
     nparms <- length(covparms)
     covfun <- get( covfun_names[j] )
     dcovfun <- get(paste0("d_",covfun_names[j]))
@@ -69,3 +69,4 @@ test_that("covariance function derivatives match finite differencing", {
     
   }
 })
+  

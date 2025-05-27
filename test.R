@@ -60,7 +60,8 @@ covparams_prior_params <- cbind(c(.1, 100, 1, .1), c(.1, 2, 1, .1) )
 # initial values from GpGp
 aaa <- get_start_parms(y[ord],X[ord,],locs[ord,],'matern_isotropic')
 beta_c <- aaa$betahat; covparams0 <- aaa$covparams
-sgrld_fit <- sgrld_mcmc(y=y[ord], X = X[ord,], NNarray = NNarray, locs = locs[ord,], beta_0 = beta_c,
+sgrld_fit <- fit_model_sgmcmc(y=y[ord], X = X[ord,], NNarray = NNarray, locs = locs[ord,], beta_0 = beta_c,
+                              algorithm = 'aaa',
                         covparams0 = covparams0, covfun_name ="matern_isotropic", lr = lr_sgrld,
                         lr_min = lr_min_sgrld, n_epochs = n_epoch, n_batch = n_batch, n_burn = n_burn,
                         thin = thin, covparams_prior_params = covparams_prior_params, silent = F)
