@@ -1,17 +1,15 @@
-#' MSGLD upate step
-#' @importFrom stats rnorm
+# MSGLD upate step
 msgld_update <- function(phi, grad_t,momentum_t,
                          beta=0.9, lr, bias_factor=1,
                          temperature=1){
   new_momentum <- beta*momentum_t + (1-beta)*(grad_t)
   new_phi <- phi + lr*( grad_t + bias_factor*momentum_t )
-  error_term <- sqrt(2*temperature*lr)*rnorm(n=length(phi))
+  error_term <- sqrt(2*temperature*lr)*stats::rnorm(n=length(phi))
   new_phi <- new_phi + error_term
   return(list(new_phi = new_phi, momentum = new_momentum))
 }
 
-#' Main MSGLD function
-#' @export
+# Main MSGLD function
 msgld_mcmc <- function(y, X, NNarray, locs, beta_0, covparams0, covfun_name = "matern_isotropic",
                          lr = 1e-3, lr_min = 2e-6, n_epochs=100, n_batch = 250, n_burn = 2000,
                          thin = 5, beta_factor = 0.9, bias_factor = 1, lambda=1e-5, covparams_prior_params, silent = F){

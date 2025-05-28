@@ -6,6 +6,9 @@
 \usage{
 parms_link_grad(covparms)
 }
+\arguments{
+\item{covparms}{Covariance parameters}
+}
 \description{
 Bijector gradient for the cov parameters
 }

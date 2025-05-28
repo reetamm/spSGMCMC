@@ -34,11 +34,17 @@ fit_model_sgmcmc(
 
 \item{beta_0}{Initial values for GP mean parameters}
 
+\item{covparams0}{Initial values for covariance parameters (same structure as GpGp)}
+
 \item{covfun_name}{Supports "matern_isotropic" and "exponential_isotropic"}
+
+\item{algorithm}{Stochastic gradient algorithm. Choose from 'ADAMSGLD', 'MSGLD', 'PSGLD', 'SGRLD'. Default is 'SGRLD'.}
 
 \item{lr}{Learning rate; 1e-3 by default}
 
 \item{lr_min}{Lower bound for learning rate; 2e-6 by default}
+
+\item{n_epochs}{Number of epochs}
 
 \item{n_batch}{Size of each batch}
 
@@ -48,9 +54,7 @@ fit_model_sgmcmc(
 
 \item{covparams_prior_params}{Check papaer for the distributions; order same as GpGp}
 
-\item{covparams_0}{Initial values for covariance parameters (same structure as GpGp)}
-
-\item{epochs}{Number of epochs}
+\item{silent}{Binary operator. `FALSE` by default}
 }
 \value{
 A list with 4 components - draws of beta, draws of covariance paramters, trace of loglik, and time

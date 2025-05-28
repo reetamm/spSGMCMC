@@ -8,7 +8,9 @@ We consider a standard normal prior on all the components}
 beta_logpior(beta, var = 1)
 }
 \arguments{
-\item{beta, }{the current value of the regression parameters}
+\item{beta}{the current value of the regression parameters}
+
+\item{var}{variance of the regression parameters}
 }
 \value{
 a scalar i.e the log-prior at beta

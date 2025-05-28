@@ -8,8 +8,9 @@ matern_parms_logprior(covparms, prior_params)
 }
 \arguments{
 \item{covparms}{\eqn{\sigma^2, \alpha, \nu, \tau^2}
-the nugget is \eqn{\sigma^2  \tau^2}
-the priors are log-normal (1,1) for the smoothness \eqn{\nu}
+the nugget is \eqn{\sigma^2  \tau^2}}
+
+\item{prior_params}{the priors are log-normal (1,1) for the smoothness \eqn{\nu}
 Gamma(9,2) for the range \eqn{\alpha}
 Gamma(.1,.1) for the spatial variance \eqn{\sigma^2}
 and  Gamma(.1, .1) for the scaled nugget}

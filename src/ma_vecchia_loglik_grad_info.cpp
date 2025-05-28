@@ -14,9 +14,17 @@ using namespace std;
 using namespace Rcpp;
 using namespace arma;
 
-
+//' Function to evaluate and return the gradient of the loglikelihood 
+//' @param batch_id Minibatch id
+//' @param covparms Covariance parameter values
+//' @param covfun_name Covariance function; 
+//' tested with 'matern_isotropic' and 'exponential_isotropic'
+//' @param y Response vector
 //' @param X Design matrix of covariates. Row \code{i} of \code{X} contains
-//' the covariates for the observation at row \code{i} of \code{locs}.
+//' the covariates for the observation at row \code{i} of \code{locs}
+//' @param current_beta Mean function parameter values
+//' @param locs Matrix of locations
+//' @param NNarray Array of nearest neighbors
 //' @return A list containing
 //' \itemize{
 //'     \item \code{loglik}: the loglikelihood
@@ -86,10 +94,11 @@ List ma_vecchia_profbeta_loglik_grad_info(
 
 //' Function to transform the gradients and fisher information
 //' of the likelihood from the constrained to unconstrained space
-//' @param \code{grad} gradient with respect to cov_params
-//' @param \code{info} Fisher information for cov_params
-//' @param \code{grad_phi} reference to vector for storing unconstrained gradients
-//' @param \code{info_phi} reference to matrix for unconstrained Fisher info
+//' @param cov_params Covariance parameter values
+//' @param grad gradient with respect to cov_params
+//' @param info Fisher information for cov_params
+//' @param grad_phi reference to vector for storing unconstrained gradients
+//' @param info_phi reference to matrix for unconstrained Fisher info
 //' @export
 // [[Rcpp::export]]
 void reparameterized_quantities(
@@ -118,10 +127,10 @@ void reparameterized_quantities(
 //' Function to take an SGDRLD step
 //' for the covariance parameters
 //' This function returns \eqn{( \log(\sigma^2), \log(\alpha), \log(\nu), \log(\tau^2) )_{t+1}}
-//' @param \eqn{\epsilon} the step size
-//' @param \code{info} the fisher information matrix i.e. preconditionner for the cov parameters
-//' @parm \code{cov_params} the current state of the cov parameters
-//' @parm \code{grad} sample gradient with respect to \eqn{( \log(\sigma^2), \log(\alpha), \log(\nu), \log(\tau^2) )_{t+1}}
+//' @param epsilon the step size
+//' @param info the fisher information matrix i.e. preconditionner for the cov parameters
+//' @param cov_params the current state of the cov parameters
+//' @param grad sample gradient with respect to \eqn{( \log(\sigma^2), \log(\alpha), \log(\nu), \log(\tau^2) )_{t+1}}
 //' @export
 // [[Rcpp::export]]
 NumericVector SGRLD_step(
@@ -143,9 +152,20 @@ NumericVector SGRLD_step(
 }
 
 //' Function to run spSGMCMC for a number of iterations
-//' @param \code{y}
-//' @param \code{X}
-//' @param \code{NNarray}
+//' @param y Response vector
+//' @param X Covariate matrix
+//' @param NNarray Array of nearest neighbors
+//' @param covfun_name Covariance function; tested with 'matern_isotropic' and 'exponential_isotropic'
+//' @param locs Matrix of locations
+//' @param beta_0 Initial estimates of mean function parameters
+//' @param covparams0 Initial estimates of covariance parameters
+//' @param prior_params Priors for mean and covariance parameters
+//' @param indexes Minibatch indices
+//' @param n_epochs Number of epochs
+//' @param n_batch Number of batches
+//' @param n_burn Number of burn-in iterations
+//' @param lr Learning rate
+//' @param thin Thin rate for MCMC samples
 // [[Rcpp::export]]
 List SGRLD_loop(
     NumericVector& y,
@@ -231,7 +251,15 @@ List SGRLD_loop(
     return traces;
 }
 
-
+//' Internal stuff with the minibatch
+//' @param batch_id Minibatch id
+//' @param NNarray Array of nearest neighbors
+//' @param covparms Covariance parameter values
+//' @param X Design matrix of covariates
+//' @param y Response vector
+//' @param locs Matrix of locations
+//' @param covfun_name Covariance function name
+//' @export
 //[[Rcpp::export]]
 List sample_pieces(
   IntegerVector batch_id,

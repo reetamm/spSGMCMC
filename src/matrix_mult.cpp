@@ -15,7 +15,7 @@ using namespace Rcpp;
 //' @param Linv Entries of the sparse inverse Cholesky factor,
 //' usually the output from \code{\link{vecchia_Linv}}.
 //' @param z the vector to be multiplied
-//' @inheritParams vecchia_meanzero_loglik
+//' @param NNarray Array of nearest neighbors
 //' @return the product of the sparse inverse Cholesky factor with a vector
 //' @export
 // [[Rcpp::export]]
@@ -54,7 +54,7 @@ NumericVector Linv_mult(NumericMatrix Linv, NumericVector z,
 //' @param Linv Entries of the sparse inverse Cholesky factor,
 //' usually the output from \code{\link{vecchia_Linv}}.
 //' @param z the vector to be multiplied
-//' @inheritParams vecchia_meanzero_loglik
+//' @param NNarray Array of nearest neighbors
 //' @return the product of the Cholesky factor with a vector
 //' @export
 // [[Rcpp::export]]
@@ -98,7 +98,7 @@ NumericVector L_mult(NumericMatrix Linv, NumericVector z,
 //' @param Linv Entries of the sparse inverse Cholesky factor,
 //' usually the output from \code{\link{vecchia_Linv}}.
 //' @param z the vector to be multiplied
-//' @inheritParams vecchia_meanzero_loglik
+//' @param NNarray Array of nearest neighbors
 //' @return the product of the transpose of the 
 //' sparse inverse Cholesky factor with a vector
 //' @export
@@ -137,7 +137,7 @@ NumericVector Linv_t_mult(NumericMatrix Linv, NumericVector z,
 //' @param Linv Entries of the sparse inverse Cholesky factor,
 //' usually the output from \code{\link{vecchia_Linv}}.
 //' @param z the vector to be multiplied
-//' @inheritParams vecchia_meanzero_loglik
+//' @param NNarray Array of nearest neighbors
 //' @return the product of the transpose of the Cholesky factor with a vector
 //' @export
 // [[Rcpp::export]]

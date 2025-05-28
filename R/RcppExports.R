@@ -114,8 +114,17 @@ rcpp_d_kernel_sexp_s <- function(M, N, l, s, equal_matrices) {
     .Call(`_spSGMCMC_rcpp_d_kernel_sexp_s`, M, N, l, s, equal_matrices)
 }
 
+#' Function to evaluate and return the gradient of the loglikelihood 
+#' @param batch_id Minibatch id
+#' @param covparms Covariance parameter values
+#' @param covfun_name Covariance function; 
+#' tested with 'matern_isotropic' and 'exponential_isotropic'
+#' @param y Response vector
 #' @param X Design matrix of covariates. Row \code{i} of \code{X} contains
-#' the covariates for the observation at row \code{i} of \code{locs}.
+#' the covariates for the observation at row \code{i} of \code{locs}
+#' @param current_beta Mean function parameter values
+#' @param locs Matrix of locations
+#' @param NNarray Array of nearest neighbors
 #' @return A list containing
 #' \itemize{
 #'     \item \code{loglik}: the loglikelihood
@@ -133,10 +142,11 @@ ma_vecchia_profbeta_loglik_grad_info <- function(batch_id, covparms, covfun_name
 
 #' Function to transform the gradients and fisher information
 #' of the likelihood from the constrained to unconstrained space
-#' @param \code{grad} gradient with respect to cov_params
-#' @param \code{info} Fisher information for cov_params
-#' @param \code{grad_phi} reference to vector for storing unconstrained gradients
-#' @param \code{info_phi} reference to matrix for unconstrained Fisher info
+#' @param cov_params Covariance parameter values
+#' @param grad gradient with respect to cov_params
+#' @param info Fisher information for cov_params
+#' @param grad_phi reference to vector for storing unconstrained gradients
+#' @param info_phi reference to matrix for unconstrained Fisher info
 #' @export
 reparameterized_quantities <- function(cov_params, grad, info, grad_phi, info_phi) {
     invisible(.Call(`_spSGMCMC_reparameterized_quantities`, cov_params, grad, info, grad_phi, info_phi))
@@ -145,23 +155,43 @@ reparameterized_quantities <- function(cov_params, grad, info, grad_phi, info_ph
 #' Function to take an SGDRLD step
 #' for the covariance parameters
 #' This function returns \eqn{( \log(\sigma^2), \log(\alpha), \log(\nu), \log(\tau^2) )_{t+1}}
-#' @param \eqn{\epsilon} the step size
-#' @param \code{info} the fisher information matrix i.e. preconditionner for the cov parameters
-#' @parm \code{cov_params} the current state of the cov parameters
-#' @parm \code{grad} sample gradient with respect to \eqn{( \log(\sigma^2), \log(\alpha), \log(\nu), \log(\tau^2) )_{t+1}}
+#' @param epsilon the step size
+#' @param info the fisher information matrix i.e. preconditionner for the cov parameters
+#' @param cov_params the current state of the cov parameters
+#' @param grad sample gradient with respect to \eqn{( \log(\sigma^2), \log(\alpha), \log(\nu), \log(\tau^2) )_{t+1}}
 #' @export
 SGRLD_step <- function(epsilon, info, cov_params, grad) {
     .Call(`_spSGMCMC_SGRLD_step`, epsilon, info, cov_params, grad)
 }
 
 #' Function to run spSGMCMC for a number of iterations
-#' @param \code{y}
-#' @param \code{X}
-#' @param \code{NNarray}
+#' @param y Response vector
+#' @param X Covariate matrix
+#' @param NNarray Array of nearest neighbors
+#' @param covfun_name Covariance function; tested with 'matern_isotropic' and 'exponential_isotropic'
+#' @param locs Matrix of locations
+#' @param beta_0 Initial estimates of mean function parameters
+#' @param covparams0 Initial estimates of covariance parameters
+#' @param prior_params Priors for mean and covariance parameters
+#' @param indexes Minibatch indices
+#' @param n_epochs Number of epochs
+#' @param n_batch Number of batches
+#' @param n_burn Number of burn-in iterations
+#' @param lr Learning rate
+#' @param thin Thin rate for MCMC samples
 SGRLD_loop <- function(y, X, NNarray, covfun_name, locs, beta_0, covparams0, prior_params, indexes, n_epochs, n_batch, n_burn, lr, thin) {
     .Call(`_spSGMCMC_SGRLD_loop`, y, X, NNarray, covfun_name, locs, beta_0, covparams0, prior_params, indexes, n_epochs, n_batch, n_burn, lr, thin)
 }
 
+#' Internal stuff with the minibatch
+#' @param batch_id Minibatch id
+#' @param NNarray Array of nearest neighbors
+#' @param covparms Covariance parameter values
+#' @param X Design matrix of covariates
+#' @param y Response vector
+#' @param locs Matrix of locations
+#' @param covfun_name Covariance function name
+#' @export
 sample_pieces <- function(batch_id, NNarray, covparms, X, y, locs, covfun_name) {
     .Call(`_spSGMCMC_sample_pieces`, batch_id, NNarray, covparms, X, y, locs, covfun_name)
 }
@@ -174,7 +204,7 @@ sample_pieces <- function(batch_id, NNarray, covparms, X, y, locs, covfun_name) 
 #' @param Linv Entries of the sparse inverse Cholesky factor,
 #' usually the output from \code{\link{vecchia_Linv}}.
 #' @param z the vector to be multiplied
-#' @inheritParams vecchia_meanzero_loglik
+#' @param NNarray Array of nearest neighbors
 #' @return the product of the sparse inverse Cholesky factor with a vector
 #' @export
 Linv_mult <- function(Linv, z, NNarray) {
@@ -190,7 +220,7 @@ Linv_mult <- function(Linv, z, NNarray) {
 #' @param Linv Entries of the sparse inverse Cholesky factor,
 #' usually the output from \code{\link{vecchia_Linv}}.
 #' @param z the vector to be multiplied
-#' @inheritParams vecchia_meanzero_loglik
+#' @param NNarray Array of nearest neighbors
 #' @return the product of the Cholesky factor with a vector
 #' @export
 L_mult <- function(Linv, z, NNarray) {
@@ -205,7 +235,7 @@ L_mult <- function(Linv, z, NNarray) {
 #' @param Linv Entries of the sparse inverse Cholesky factor,
 #' usually the output from \code{\link{vecchia_Linv}}.
 #' @param z the vector to be multiplied
-#' @inheritParams vecchia_meanzero_loglik
+#' @param NNarray Array of nearest neighbors
 #' @return the product of the transpose of the 
 #' sparse inverse Cholesky factor with a vector
 #' @export
@@ -223,7 +253,7 @@ Linv_t_mult <- function(Linv, z, NNarray) {
 #' @param Linv Entries of the sparse inverse Cholesky factor,
 #' usually the output from \code{\link{vecchia_Linv}}.
 #' @param z the vector to be multiplied
-#' @inheritParams vecchia_meanzero_loglik
+#' @param NNarray Array of nearest neighbors
 #' @return the product of the transpose of the Cholesky factor with a vector
 #' @export
 L_t_mult <- function(Linv, z, NNarray) {
@@ -238,7 +268,10 @@ L_t_mult <- function(Linv, z, NNarray) {
 #' the non-zero entries of row \code{i} of
 #' the inverse Cholesky matrix. The columns of the non-zero entries
 #' are specified in \code{NNarray[i,]}.
-#' @inheritParams vecchia_meanzero_loglik
+#' @param covparms Covariance parameters
+#' @param covfun_name Covariance function name
+#' @param locs Matrix of locations
+#' @param NNarray Array of nearest neighbors
 #' @param start_ind Compute entries of Linv only for rows \code{start_ind}
 #' until the last row.
 #' @return matrix containing entries of inverse Cholesky
@@ -249,7 +282,8 @@ vecchia_Linv <- function(covparms, covfun_name, locs, NNarray, start_ind = 1L) {
 
 #' log-prior for regression coefficients \eqn{\beta}
 #' We consider a standard normal prior on all the components 
-#' @param beta, the current value of the regression parameters
+#' @param beta the current value of the regression parameters
+#' @param var variance of the regression parameters
 #' @return a scalar i.e the log-prior at beta
 #' @export
 beta_logpior <- function(beta, var = 1.0) {
@@ -257,7 +291,8 @@ beta_logpior <- function(beta, var = 1.0) {
 }
 
 #' gradient of log_prior on \eqn{\beta}
-#' @param beta, current value
+#' @param beta current value of the regression paramaters
+#' @param var variance of the regression parameters
 #' @return vector with same size as \eqn{\beta}
 #' @export
 beta_grad_logprior <- function(beta, var = 1.0) {
@@ -267,7 +302,7 @@ beta_grad_logprior <- function(beta, var = 1.0) {
 #' log-prior for matern cov parameters
 #' @param covparms \eqn{\sigma^2, \alpha, \nu, \tau^2}
 #' the nugget is \eqn{\sigma^2  \tau^2}
-#' the priors are log-normal (1,1) for the smoothness \eqn{\nu}
+#' @param prior_params the priors are log-normal (1,1) for the smoothness \eqn{\nu}
 #' Gamma(9,2) for the range \eqn{\alpha}
 #' Gamma(.1,.1) for the spatial variance \eqn{\sigma^2}
 #' and  Gamma(.1, .1) for the scaled nugget
@@ -280,7 +315,7 @@ matern_parms_logprior <- function(covparms, prior_params) {
 #' gradient of log_prior for matern cov_parameters
 #' @param covparms \eqn{\sigma^2, \alpha, \nu, \tau^2}
 #' the nugget is \eqn{\sigma^2  \tau^2}
-#' the priors are log-normal (1,1) for the smoothness \eqn{\nu}
+#' @param prior_params the priors are log-normal (1,1) for the smoothness \eqn{\nu}
 #' Gamma(9,2) for the range \eqn{\alpha}
 #' Gamma(.1,.1) for the spatial variance \eqn{\sigma^2}
 #' and  Gamma(.1, .1) for the scaled nugget
@@ -292,6 +327,7 @@ matern_parms_prior_grad <- function(covparms, prior_params) {
 
 #' Bijector for the cov parameters
 #' all the parameters are sampled on the log scale
+#' @param covparms Covariance parameters
 #' @export
 parms_link <- function(covparms) {
     .Call(`_spSGMCMC_parms_link`, covparms)
@@ -299,30 +335,38 @@ parms_link <- function(covparms) {
 
 #' Inverse Bijector for the cov parameters
 #' all the parameters are sampled on the log scale
+#' @param logparms Parameters on the log scale
 #' @export
 parms_invlink <- function(logparms) {
     .Call(`_spSGMCMC_parms_invlink`, logparms)
 }
 
 #' Bijector gradient for the cov parameters
+#' @param covparms Covariance parameters
 #' @export
 parms_link_grad <- function(covparms) {
     .Call(`_spSGMCMC_parms_link_grad`, covparms)
 }
 
 #' Inverse Bijector gradient for the cov parameters
+#' all the parameters are sampled on the log scale
+#' @param logparms Parameters on the log scale
 #' @export
 parms_invlink_grad <- function(logparms) {
     .Call(`_spSGMCMC_parms_invlink_grad`, logparms)
 }
 
 #' log prior of transformed matern parameters
+#' @param logparms Log of the parameter values
+#' @param prior_params Prior of the parameters
 #' @export
 transformed_matern_parms_logprior <- function(logparms, prior_params) {
     .Call(`_spSGMCMC_transformed_matern_parms_logprior`, logparms, prior_params)
 }
 
 #' log prior gradient of transformed matern parameters
+#' @param logparms Log of the parameter values
+#' @param prior_params Prior of the parameters
 #' @export
 transformed_matern_parms_logprior_grad <- function(logparms, prior_params) {
     .Call(`_spSGMCMC_transformed_matern_parms_logprior_grad`, logparms, prior_params)

@@ -7,7 +7,9 @@
 beta_grad_logprior(beta, var = 1)
 }
 \arguments{
-\item{beta, }{current value}
+\item{beta}{current value of the regression paramaters}
+
+\item{var}{variance of the regression parameters}
 }
 \value{
 vector with same size as \eqn{\beta}

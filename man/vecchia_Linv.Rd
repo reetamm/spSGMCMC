@@ -7,6 +7,14 @@
 vecchia_Linv(covparms, covfun_name, locs, NNarray, start_ind = 1L)
 }
 \arguments{
+\item{covparms}{Covariance parameters}
+
+\item{covfun_name}{Covariance function name}
+
+\item{locs}{Matrix of locations}
+
+\item{NNarray}{Array of nearest neighbors}
+
 \item{start_ind}{Compute entries of Linv only for rows \code{start_ind}
 until the last row.}
 }

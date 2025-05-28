@@ -9,9 +9,13 @@ This function returns \eqn{( \log(\sigma^2), \log(\alpha), \log(\nu), \log(\tau^
 SGRLD_step(epsilon, info, cov_params, grad)
 }
 \arguments{
-\item{\eqn{\epsilon}}{the step size}
+\item{epsilon}{the step size}
 
-\item{\code{info}}{the fisher information matrix i.e. preconditionner for the cov parameters}
+\item{info}{the fisher information matrix i.e. preconditionner for the cov parameters}
+
+\item{cov_params}{the current state of the cov parameters}
+
+\item{grad}{sample gradient with respect to \eqn{( \log(\sigma^2), \log(\alpha), \log(\nu), \log(\tau^2) )_{t+1}}}
 }
 \description{
 Function to take an SGDRLD step

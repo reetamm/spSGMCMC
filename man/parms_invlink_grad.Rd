@@ -2,10 +2,15 @@
 % Please edit documentation in R/RcppExports.R
 \name{parms_invlink_grad}
 \alias{parms_invlink_grad}
-\title{Inverse Bijector gradient for the cov parameters}
+\title{Inverse Bijector gradient for the cov parameters
+all the parameters are sampled on the log scale}
 \usage{
 parms_invlink_grad(logparms)
 }
+\arguments{
+\item{logparms}{Parameters on the log scale}
+}
 \description{
 Inverse Bijector gradient for the cov parameters
+all the parameters are sampled on the log scale
 }

@@ -1,5 +1,4 @@
-#' ADAM SGLD update step
-#' @importFrom stats rnorm
+# ADAM SGLD update step
 adam_sgld_update <- function(phi, grad_t, lr,
                              momentum_t, V_t,
                              beta_1 = 0.9, 
@@ -10,12 +9,11 @@ adam_sgld_update <- function(phi, grad_t, lr,
   V <- beta_2*V_t + (1-beta_2)*crossprod(matrix(grad_t, nrow = 1))
   R <- chol(V + 1e-5*diag(nrow = length(grad_t)))
   A <- forwardsolve(t(R), new_momentum)
-  new_phi <- phi + lr*(grad_t + bias_factor*A) + sqrt(2*lr)*rnorm(n = length(phi))
+  new_phi <- phi + lr*(grad_t + bias_factor*A) + sqrt(2*lr)*stats::rnorm(n = length(phi))
   return(list(new_phi = new_phi, momentum = new_momentum, V = V))
 }
 
-#' Main ADAM SGLD function
-#' @export
+# Main ADAM SGLD function
 adamsgld_mcmc <- function(y, X, NNarray, locs, beta_0, covparams0, covfun_name = "matern_isotropic",
                       lr = 1e-3, lr_min = 2e-6, n_epochs=100, n_batch = 250, n_burn = 2000,
                       thin = 5, beta1_factor = 0.9, beta2_factor = 0.99, 

@@ -21,6 +21,35 @@ SGRLD_loop(
   thin
 )
 }
+\arguments{
+\item{y}{Response vector}
+
+\item{X}{Covariate matrix}
+
+\item{NNarray}{Array of nearest neighbors}
+
+\item{covfun_name}{Covariance function; tested with 'matern_isotropic' and 'exponential_isotropic'}
+
+\item{locs}{Matrix of locations}
+
+\item{beta_0}{Initial estimates of mean function parameters}
+
+\item{covparams0}{Initial estimates of covariance parameters}
+
+\item{prior_params}{Priors for mean and covariance parameters}
+
+\item{indexes}{Minibatch indices}
+
+\item{n_epochs}{Number of epochs}
+
+\item{n_batch}{Number of batches}
+
+\item{n_burn}{Number of burn-in iterations}
+
+\item{lr}{Learning rate}
+
+\item{thin}{Thin rate for MCMC samples}
+}
 \description{
 Function to run spSGMCMC for a number of iterations
 }

@@ -6,6 +6,11 @@
 \usage{
 transformed_matern_parms_logprior_grad(logparms, prior_params)
 }
+\arguments{
+\item{logparms}{Log of the parameter values}
+
+\item{prior_params}{Prior of the parameters}
+}
 \description{
 log prior gradient of transformed matern parameters
 }

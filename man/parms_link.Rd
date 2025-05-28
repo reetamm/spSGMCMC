@@ -7,6 +7,9 @@ all the parameters are sampled on the log scale}
 \usage{
 parms_link(covparms)
 }
+\arguments{
+\item{covparms}{Covariance parameters}
+}
 \description{
 Bijector for the cov parameters
 all the parameters are sampled on the log scale

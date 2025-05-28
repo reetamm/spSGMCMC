@@ -30,7 +30,7 @@ ggplot() +
 ##### Split into train/test
 #####
 #####
-test_prop <- 0.6
+test_prop <- 0.2
 test_size <- floor(nrow(argo2016)*test_prop)
 id_test <- sample(1:nrow(argo2016), size = test_size)
 id_train <- 1:nrow(argo2016)
@@ -46,16 +46,17 @@ y <- argo2016_train$temp100
 X <- cbind(1, argo2016_train$lon, argo2016_train$lat, argo2016_train$lon^2, argo2016_train$lat^2)
 locs = cbind(argo2016_train$lon, argo2016_train$lat)
 ord <- GpGp::order_maxmin(locs = locs, lonlat = T)
-NNarray <- GpGp::find_ordered_nn(locs = locs[ord,], m = 10, lonlat = T)
+NNarray <- GpGp::find_ordered_nn(locs = locs[ord,], m = 15, lonlat = T)
 gpgp_fit <- GpGp::fit_model(y[ord], locs = locs[ord,], X = X[ord,], covfun_name = "matern_isotropic", NNarray = NNarray,
-                      reorder = F, silent = F, m_seq = c(10))
+                      reorder = F, silent = F, m_seq = c(15))
 
 
 
 #####
 ##### Now fit the SGRLD method
 #####
-n_epoch <- 200
+length(y)
+n_epoch <- 400
 n_batch <- 250
 lr_no_gamma = 1e-4; lr_min_no_gamma = 5e-5
 lr_rmsprop = 1e-6; lr_min_rmsprop = 1e-7
@@ -82,6 +83,7 @@ sgrld_fit <- sgrld_mcmc(y=y[ord], X = X[ord,], NNarray = NNarray, locs = locs[or
                       covparams0 = covparams0, covfun_name ="matern_isotropic", lr = lr_no_gamma,
                       lr_min = lr_min_no_gamma, n_epochs = n_epoch, n_batch = n_batch, n_burn = n_burn,
                       thin = thin, covparams_prior_params = covparams_prior_params, silent = F)
+dim(sgrld_fit$theta_samples)
 # toc <- proc.time()
 # sink(type="message")
 # sink(type="output")

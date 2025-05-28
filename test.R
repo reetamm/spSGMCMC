@@ -1,11 +1,11 @@
 # install.packages("GpGp")
-# library(GpGp)
+
 rm(list = ls())
-library(spSGMCMC)
 library(ggplot2)
 library(tidyverse)
 library(viridis)
-
+# library(GpGp)
+library(spSGMCMC)
 ## Open and plot the data
 argo2016 <- GpGp::argo2016
 argo2016$lon <- ifelse(argo2016$lon>180,argo2016$lon-360,argo2016$lon)
@@ -61,7 +61,7 @@ covparams_prior_params <- cbind(c(.1, 100, 1, .1), c(.1, 2, 1, .1) )
 aaa <- get_start_parms(y[ord],X[ord,],locs[ord,],'matern_isotropic')
 beta_c <- aaa$betahat; covparams0 <- aaa$covparams
 sgrld_fit <- fit_model_sgmcmc(y=y[ord], X = X[ord,], NNarray = NNarray, locs = locs[ord,], beta_0 = beta_c,
-                              algorithm = 'aaa',
+                              algorithm = 'SGRLD',
                         covparams0 = covparams0, covfun_name ="matern_isotropic", lr = lr_sgrld,
                         lr_min = lr_min_sgrld, n_epochs = n_epoch, n_batch = n_batch, n_burn = n_burn,
                         thin = thin, covparams_prior_params = covparams_prior_params, silent = F)
@@ -70,36 +70,3 @@ sgrld_fit <- fit_model_sgmcmc(y=y[ord], X = X[ord,], NNarray = NNarray, locs = l
 sgrld_fit$elapsed_time
 apply(sgrld_fit$beta_samples,2,mean)
 apply(sgrld_fit$theta_samples,2,mean)
-
-
-psgld_fit <- psgld_mcmc(y=y[ord], X = X[ord,], NNarray = NNarray, locs = locs[ord,], beta_0 = beta_c,
-                        covparams0 = covparams0, covfun_name ="matern_isotropic", lr = lr_sgrld,
-                        lr_min = lr_min_sgrld, n_epochs = n_epoch, n_batch = n_batch, n_burn = n_burn,
-                        thin = thin, covparams_prior_params = covparams_prior_params, silent = F)
-
-#### Total time taken
-psgld_fit$elapsed_time
-apply(psgld_fit$beta_samples,2,mean)
-apply(psgld_fit$theta_samples,2,mean)
-
-
-msgld_fit <- msgld_mcmc(y=y[ord], X = X[ord,], NNarray = NNarray, locs = locs[ord,], beta_0 = beta_c,
-                        covparams0 = covparams0, covfun_name ="matern_isotropic", lr = lr_sgrld,
-                        lr_min = lr_min_sgrld, n_epochs = n_epoch, n_batch = n_batch, n_burn = n_burn,
-                        thin = thin, covparams_prior_params = covparams_prior_params, silent = F)
-
-#### Total time taken
-msgld_fit$elapsed_time
-apply(msgld_fit$beta_samples,2,mean)
-apply(msgld_fit$theta_samples,2,mean)
-
-
-adamsgld_fit <- adamsgld_mcmc(y=y[ord], X = X[ord,], NNarray = NNarray, locs = locs[ord,], beta_0 = beta_c,
-                        covparams0 = covparams0, covfun_name ="matern_isotropic", lr = lr_sgrld,
-                        lr_min = lr_min_sgrld, n_epochs = n_epoch, n_batch = n_batch, n_burn = n_burn,
-                        thin = thin, covparams_prior_params = covparams_prior_params, silent = F)
-
-#### Total time taken
-adamsgld_fit$elapsed_time
-apply(adamsgld_fit$beta_samples,2,mean)
-apply(adamsgld_fit$theta_samples,2,mean)

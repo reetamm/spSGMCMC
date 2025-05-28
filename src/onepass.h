@@ -497,7 +497,10 @@ void  my_synthesize(
 //' the non-zero entries of row \code{i} of
 //' the inverse Cholesky matrix. The columns of the non-zero entries
 //' are specified in \code{NNarray[i,]}.
-//' @inheritParams vecchia_meanzero_loglik
+//' @param covparms Covariance parameters
+//' @param covfun_name Covariance function name
+//' @param locs Matrix of locations
+//' @param NNarray Array of nearest neighbors
 //' @param start_ind Compute entries of Linv only for rows \code{start_ind}
 //' until the last row.
 //' @return matrix containing entries of inverse Cholesky

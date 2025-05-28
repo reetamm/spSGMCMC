@@ -7,6 +7,9 @@ all the parameters are sampled on the log scale}
 \usage{
 parms_invlink(logparms)
 }
+\arguments{
+\item{logparms}{Parameters on the log scale}
+}
 \description{
 Inverse Bijector for the cov parameters
 all the parameters are sampled on the log scale

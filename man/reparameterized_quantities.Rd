@@ -8,13 +8,15 @@ of the likelihood from the constrained to unconstrained space}
 reparameterized_quantities(cov_params, grad, info, grad_phi, info_phi)
 }
 \arguments{
-\item{\code{grad}}{gradient with respect to cov_params}
+\item{cov_params}{Covariance parameter values}
 
-\item{\code{info}}{Fisher information for cov_params}
+\item{grad}{gradient with respect to cov_params}
 
-\item{\code{grad_phi}}{reference to vector for storing unconstrained gradients}
+\item{info}{Fisher information for cov_params}
 
-\item{\code{info_phi}}{reference to matrix for unconstrained Fisher info}
+\item{grad_phi}{reference to vector for storing unconstrained gradients}
+
+\item{info_phi}{reference to matrix for unconstrained Fisher info}
 }
 \description{
 Function to transform the gradients and fisher information

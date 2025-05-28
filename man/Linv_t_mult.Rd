@@ -11,6 +11,8 @@ Linv_t_mult(Linv, z, NNarray)
 usually the output from \code{\link{vecchia_Linv}}.}
 
 \item{z}{the vector to be multiplied}
+
+\item{NNarray}{Array of nearest neighbors}
 }
 \value{
 the product of the transpose of the 

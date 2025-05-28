@@ -10,7 +10,8 @@ using namespace Rcpp;
 
 //' log-prior for regression coefficients \eqn{\beta}
 //' We consider a standard normal prior on all the components 
-//' @param beta, the current value of the regression parameters
+//' @param beta the current value of the regression parameters
+//' @param var variance of the regression parameters
 //' @return a scalar i.e the log-prior at beta
 //' @export
 // [[Rcpp::export]]
@@ -19,7 +20,8 @@ double beta_logpior( NumericVector& beta, double var = 1.0 ){
  }
  
 //' gradient of log_prior on \eqn{\beta}
-//' @param beta, current value
+//' @param beta current value of the regression paramaters
+//' @param var variance of the regression parameters
 //' @return vector with same size as \eqn{\beta}
 //' @export
 // [[Rcpp::export]]
@@ -32,7 +34,7 @@ NumericVector beta_grad_logprior(NumericVector& beta, double var = 1.0){
 //' log-prior for matern cov parameters
 //' @param covparms \eqn{\sigma^2, \alpha, \nu, \tau^2}
 //' the nugget is \eqn{\sigma^2  \tau^2}
-//' the priors are log-normal (1,1) for the smoothness \eqn{\nu}
+//' @param prior_params the priors are log-normal (1,1) for the smoothness \eqn{\nu}
 //' Gamma(9,2) for the range \eqn{\alpha}
 //' Gamma(.1,.1) for the spatial variance \eqn{\sigma^2}
 //' and  Gamma(.1, .1) for the scaled nugget
@@ -50,7 +52,7 @@ NumericVector matern_parms_logprior(NumericVector& covparms, NumericMatrix& prio
 //' gradient of log_prior for matern cov_parameters
 //' @param covparms \eqn{\sigma^2, \alpha, \nu, \tau^2}
 //' the nugget is \eqn{\sigma^2  \tau^2}
-//' the priors are log-normal (1,1) for the smoothness \eqn{\nu}
+//' @param prior_params the priors are log-normal (1,1) for the smoothness \eqn{\nu}
 //' Gamma(9,2) for the range \eqn{\alpha}
 //' Gamma(.1,.1) for the spatial variance \eqn{\sigma^2}
 //' and  Gamma(.1, .1) for the scaled nugget
@@ -68,6 +70,7 @@ NumericVector matern_parms_prior_grad(NumericVector& covparms, NumericMatrix& pr
 
 //' Bijector for the cov parameters
 //' all the parameters are sampled on the log scale
+//' @param covparms Covariance parameters
 //' @export
 // [[Rcpp::export]]
 NumericVector parms_link( NumericVector& covparms){
@@ -78,6 +81,7 @@ NumericVector parms_link( NumericVector& covparms){
 
 //' Inverse Bijector for the cov parameters
 //' all the parameters are sampled on the log scale
+//' @param logparms Parameters on the log scale
 //' @export
 // [[Rcpp::export]]
 NumericVector parms_invlink( NumericVector& logparms){
@@ -88,6 +92,7 @@ NumericVector parms_invlink( NumericVector& logparms){
 
 
 //' Bijector gradient for the cov parameters
+//' @param covparms Covariance parameters
 //' @export
 // [[Rcpp::export]]
 NumericVector parms_link_grad(NumericVector& covparms){
@@ -96,6 +101,8 @@ NumericVector parms_link_grad(NumericVector& covparms){
 }
 
 //' Inverse Bijector gradient for the cov parameters
+//' all the parameters are sampled on the log scale
+//' @param logparms Parameters on the log scale
 //' @export
 // [[Rcpp::export]]
 NumericVector parms_invlink_grad(NumericVector& logparms){
@@ -104,6 +111,8 @@ NumericVector parms_invlink_grad(NumericVector& logparms){
 }
 
 //' log prior of transformed matern parameters
+//' @param logparms Log of the parameter values
+//' @param prior_params Prior of the parameters
 //' @export
 // [[Rcpp::export]]
 NumericVector transformed_matern_parms_logprior(NumericVector& logparms, NumericMatrix& prior_params){
@@ -114,6 +123,8 @@ NumericVector transformed_matern_parms_logprior(NumericVector& logparms, Numeric
 }
 
 //' log prior gradient of transformed matern parameters
+//' @param logparms Log of the parameter values
+//' @param prior_params Prior of the parameters
 //' @export
 // [[Rcpp::export]]
 NumericVector transformed_matern_parms_logprior_grad(NumericVector& logparms, NumericMatrix& prior_params){

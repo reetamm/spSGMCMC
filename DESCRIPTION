@@ -1,14 +1,13 @@
 Package: spSGMCMC
 Type: Package
-Title: Stochastic gradient MCMC for massive geostatistical data
+Title: spatial Stochastic Gradient Markov Chain Monte-Carlo
 Version: 0.1
 Date: 2024-08-26
 Author: Your Name
 Maintainer: Reetam Majumder <reetamm@uark.edu>
-Description: Package accompanying the arxiv paper - https://arxiv.org/abs/2405.04531
+Description: Implementation of code for the paper 'Stochastic gradient MCMC for massive geostatistical data' (https://doi.org/10.48550/arXiv.2405.04531). 
 License: GPL (>= 2)
 Imports: 
-    FNN,
     Rcpp,
     stats
 LinkingTo: 

@@ -9,15 +9,17 @@
 #' @param NNarray Nearest neighbor object output from GpGp's find_ordered_nn function
 #' @param locs Matrix of locations with each row corresponding to a location
 #' @param beta_0 Initial values for GP mean parameters
-#' @param covparams_0 Initial values for covariance parameters (same structure as GpGp)
+#' @param covparams0 Initial values for covariance parameters (same structure as GpGp)
 #' @param covfun_name Supports "matern_isotropic" and "exponential_isotropic"
+#' @param algorithm Stochastic gradient algorithm. Choose from 'ADAMSGLD', 'MSGLD', 'PSGLD', 'SGRLD'. Default is 'SGRLD'.
 #' @param lr Learning rate; 1e-3 by default
 #' @param lr_min Lower bound for learning rate; 2e-6 by default
-#' @param epochs Number of epochs
+#' @param n_epochs Number of epochs
 #' @param n_batch Size of each batch
 #' @param n_burn Burn-in period for MCMC
 #' @param thin Thin posterior samples
 #' @param covparams_prior_params Check papaer for the distributions; order same as GpGp
+#' @param silent Binary operator. `FALSE` by default
 #' @return A list with 4 components - draws of beta, draws of covariance paramters, trace of loglik, and time
 #' @export
 fit_model_sgmcmc <- function(y, X, NNarray, locs, beta_0, covparams0, covfun_name = "matern_isotropic",
